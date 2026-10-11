@@ -65,47 +65,67 @@ CAREERS = {
     }
 }
 
-# Authentication - Email Magic Link
+# Authentication - Email OTP
 if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
-# Handle the authorization code returned by Supabase
-auth_code = st.query_params.get("code")
-
-if auth_code and not st.session_state.user_email:
-    try:
-        result = supabase.auth.exchange_code_for_session(auth_code)
-
-        if result.user:
-            st.session_state.user_email = result.user.email
-            st.query_params.clear()
-            st.rerun()
-    except Exception as e:
-        st.error(
-            "Sign-in link could not be verified. "
-            "Please request a new link and try again."
-        )
+if "otp_sent" not in st.session_state:
+    st.session_state.otp_sent = False
 
 if not st.session_state.user_email:
-    st.subheader("🔐 Sign in with Email Link")
-    st.write("Enter your email to receive a sign-in link.")
+    st.subheader("🔐 Sign in with Email OTP")
+    st.write("Enter your email to receive a verification code.")
 
-    email = st.text_input("Email address", key="magic_email").strip()
+    email = st.text_input(
+        "Email address", key="otp_email"
+    ).strip()
 
-    if st.button("Send Sign-in Link", type="primary"):
+    if st.button("Send OTP", type="primary"):
         if not email or "@" not in email:
             st.error("Please enter a valid email address.")
         else:
             try:
                 supabase.auth.sign_in_with_otp({
-                    "email": email
+                    "email": email,
+                    "options": {"should_create_user": True}
                 })
+                st.session_state.otp_sent = True
                 st.success(
-                    "If the request was accepted, "
-                    "check your email for the sign-in link."
+                    "Check your email for the verification code."
                 )
             except Exception as e:
-                st.error(f"Could not send sign-in link: {e}")
+                st.error(f"Could not send OTP: {e}")
+
+    if st.session_state.otp_sent:
+        with st.form("verify_otp_form"):
+            otp = st.text_input("Enter email verification code")
+            verify_clicked = st.form_submit_button(
+                "Verify OTP", type="primary"
+            )
+
+        if verify_clicked:
+            if not otp.strip():
+                st.error("Please enter the verification code.")
+            else:
+                try:
+                    result = supabase.auth.verify_otp({
+                        "email": st.session_state.otp_email,
+                        "token": otp.strip(),
+                        "type": "email"
+                    })
+
+                    if result.user and result.session:
+                        st.session_state.user_email = result.user.email
+                        st.session_state.otp_sent = False
+                        st.success("Email verified successfully!")
+                        st.rerun()
+                    else:
+                        st.error("Verification was unsuccessful.")
+                except Exception:
+                    st.error(
+                        "OTP verification failed or expired. "
+                        "Request a new code and try again."
+                    )
 
     st.stop()
                
