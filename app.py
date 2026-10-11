@@ -78,6 +78,7 @@ if not st.session_state.user_email:
 
     email = st.text_input("Email address", key="otp_email").strip()
 
+
     if st.button("Send OTP", type="primary"):
         if not email or "@" not in email:
             st.error("Please enter a valid email address.")
@@ -89,9 +90,9 @@ if not st.session_state.user_email:
                 st.session_state.otp_sent = True
                 st.session_state.otp_email = email
                 st.success("If the request was accepted, check your email for the OTP.")
-except Exception as e:
-    st.error(f"Could not send OTP: {e}")
-
+            except Exception as e:
+              st.error(f"Could not send OTP: {e}")
+        
     if st.session_state.otp_sent:
         with st.form("verify_otp_form"):
             otp = st.text_input("Enter the email verification code")
