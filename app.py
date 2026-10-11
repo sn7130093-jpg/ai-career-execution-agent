@@ -89,8 +89,8 @@ if not st.session_state.user_email:
                 st.session_state.otp_sent = True
                 st.session_state.otp_email = email
                 st.success("If the request was accepted, check your email for the OTP.")
-            except Exception:
-                st.error("Could not send OTP. Please check your email and try again.")
+except Exception as e:
+    st.error(f"Could not send OTP: {e}")
 
     if st.session_state.otp_sent:
         with st.form("verify_otp_form"):
