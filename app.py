@@ -56,7 +56,7 @@ CAREERS = {
     "Python Developer": {
         "skills": ["Python", "SQL", "Git", "Problem Solving", "APIs"],
         "roadmap": [
-            ("Python", "Practice functions, loops, and data structure
+            ("Python", "Practice functions, loops, and data structures."),
 # Authentication - Email and Password
 
 APP_URL = "https://ai-career-execution-agent-tzhqzd27gmfgqb7dtnbqzj.streamlit.app"
