@@ -572,7 +572,7 @@ if not st.session_state.user_email:
             except Exception as e:
                 st.error(f"Authentication failed: {e}")
 
-    st.stop()s."),
+   
             ("Problem Solving", "Solve beginner programming exercises."),
             ("SQL", "Learn database queries and CRUD operations."),
             ("Git", "Practice commits and version control."),
