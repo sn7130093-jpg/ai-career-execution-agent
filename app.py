@@ -120,10 +120,10 @@ if not st.session_state.user_email:
                         st.error("Login unsuccessful. Please try again.")
 
             except Exception as e:
-                st.error(f"Authentication error: {e}")
-                    "Login or account creation failed. "
-                    "Check your details and Supabase settings."
-                )
+                st.error(f"Authentication error:{e}")
+                    
+                
+                
 
     st.stop()
                
