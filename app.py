@@ -443,143 +443,161 @@ if not st.session_state.user_email:
             except Exception as e:
                 st.error(f"Authentication failed: {e}")
 
-    st.stop()# Authentication - Email and Password
-
-APP_URL = "https://ai-career-execution-agent-tzhqzd27gmfgqb7dtnbqzj.streamlit.app"
+    st.stop()
+# ==============================
+# AUTHENTICATION: SUPABASE
+# ==============================
 
 if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
-if "recovery_mode" not in st.session_state:
-    st.session_state.recovery_mode = False
+if "reset_mode" not in st.session_state:
+    st.session_state.reset_mode = False
 
-# Handle the recovery code returned by Supabase
-recovery_code = st.query_params.get("code")
+if not st.session_state.user_email:
 
-if recovery_code and not st.session_state.recovery_mode:
-    try:
-        supabase.auth.exchange_code_for_session(recovery_code)
-        st.session_state.recovery_mode = True
-        st.query_params.clear()
-        st.rerun()
-    except Exception:
-        st.error(
-            "This reset link is invalid or expired. "
-            "Request a new password reset email."
+    st.subheader("🔐 AI Career Execution Agent")
+
+    # PASSWORD RESET FORM
+    if st.session_state.reset_mode:
+
+        st.write("Reset your password")
+
+        reset_email = st.text_input(
+            "Registered email address",
+            key="reset_email"
         )
-        st.stop()
 
-# Show the new-password form
-if st.session_state.recovery_mode:
-    st.subheader("🔐 Set a New Password")
+        if st.button("Send Reset Link"):
+            if not reset_email or "@" not in reset_email:
+                st.error("Enter a valid email address.")
+            else:
+                try:
+                    supabase.auth.reset_password_for_email(
+                        reset_email,
+                        {
+                            "redirect_to":
+                            "https://ai-career-execution-agent-tzhqzd27gmfgqb7dtnbqzj.streamlit.app/"
+                        }
+                    )
+                    st.success(
+                        "If the email is registered, check your inbox "
+                        "and spam folder for the reset link."
+                    )
+                except Exception:
+                    st.error(
+                        "Could not send reset email. Check Supabase "
+                        "email settings and redirect URLs."
+                    )
 
-    new_password = st.text_input(
-        "New password",
-        type="password",
-        key="new_password"
-    )
-    confirm_password = st.text_input(
-        "Confirm new password",
-        type="password",
-        key="confirm_new_password"
-    )
+        if st.button("Back to Login"):
+            st.session_state.reset_mode = False
+            st.rerun()
 
-    if st.button("Update Password", type="primary"):
-        if len(new_password) < 8:
-            st.error("Password must be at least 8 characters.")
-        elif new_password != confirm_password:
-            st.error("Passwords do not match.")
-        else:
-            try:
-                supabase.auth.update_user({"password": new_password})
-                st.session_state.recovery_mode = False
-                st.session_state.user_email = None
-                supabase.auth.sign_out()
-                st.success(
-                    "Password updated successfully. Please log in "
-                    "using your new password."
-                )
-            except Exception:
-                st.error(
-                    "Password update failed. Request a fresh reset link "
-                    "and try again."
-                )
+    # NEW PASSWORD FORM
+    elif st.query_params.get("type") == "recovery":
+
+        st.write("Choose a new password")
+
+        new_password = st.text_input(
+            "New password",
+            type="password",
+            key="new_password"
+        )
+
+        confirm_password = st.text_input(
+            "Confirm new password",
+            type="password",
+            key="confirm_password"
+        )
+
+        if st.button("Update Password"):
+            if len(new_password) < 8:
+                st.error("Use at least 8 characters.")
+            elif new_password != confirm_password:
+                st.error("Passwords do not match.")
+            else:
+                try:
+                    supabase.auth.update_user({
+                        "password": new_password
+                    })
+                    st.success(
+                        "Password updated. Return to login."
+                    )
+                    st.session_state.reset_mode = False
+                except Exception:
+                    st.error(
+                        "Password update failed. Open the reset link "
+                        "again and try once more."
+                    )
+
+    # LOGIN AND ACCOUNT CREATION
+    else:
+
+        auth_mode = st.radio(
+            "Choose an option",
+            ["Log In", "Create Account"],
+            horizontal=True
+        )
+
+        email = st.text_input(
+            "Email address",
+            key="auth_email"
+        ).strip()
+
+        password = st.text_input(
+            "Password",
+            type="password",
+            key="auth_password"
+        )
+
+        if st.button("Forgot Password?"):
+            st.session_state.reset_mode = True
+            st.rerun()
+
+        if st.button(auth_mode, type="primary"):
+
+            if not email or not password:
+                st.error("Enter your email and password.")
+            else:
+                try:
+                    if auth_mode == "Create Account":
+
+                        result = supabase.auth.sign_up({
+                            "email": email,
+                            "password": password
+                        })
+
+                        if result.session and result.user:
+                            st.session_state.user_email = (
+                                result.user.email
+                            )
+                            st.rerun()
+                        else:
+                            st.success(
+                                "Check your email to confirm your "
+                                "account, then log in."
+                            )
+
+                    else:
+
+                        result = supabase.auth.sign_in_with_password({
+                            "email": email,
+                            "password": password
+                        })
+
+                        if result.user and result.session:
+                            st.session_state.user_email = (
+                                result.user.email
+                            )
+                            st.rerun()
+                        else:
+                            st.error("Login failed. Try again.")
+
+                except Exception as e:
+                    st.error(f"Authentication failed: {e}")
 
     st.stop()
-
-# Normal login and signup
-if not st.session_state.user_email:
-    st.subheader("🔐 AI Career Execution Agent")
-    st.write("Sign in or create an account to continue.")
-
-    auth_mode = st.radio(
-        "Choose an option",
-        ["Log In", "Create Account"],
-        horizontal=True
-    )
-
-    email = st.text_input("Email address").strip()
-    password = st.text_input("Password", type="password")
-
-    if st.button("Reset Password"):
-        if not email or "@" not in email:
-            st.error("Enter your registered email address first.")
-        else:
-            try:
-                supabase.auth.reset_password_for_email(
-                    email,
-                    options={"redirect_to": APP_URL}
-                )
-                st.success(
-                    "Check your inbox and spam folder for the reset link."
-                )
-            except Exception:
-                st.error(
-                    "Could not send reset email. Check Supabase settings."
-                )
-
-    if st.button(auth_mode, type="primary"):
-        if not email or not password:
-            st.error("Please enter your email and password.")
-        else:
-            try:
-                if auth_mode == "Create Account":
-                    result = supabase.auth.sign_up({
-                        "email": email,
-                        "password": password
-                    })
-
-                    if result.session and result.user:
-                        st.session_state.user_email = result.user.email
-                        st.rerun()
-                    else:
-                        st.info(
-                            "Check your email to confirm your account, "
-                            "then log in."
-                        )
-                else:
-                    result = supabase.auth.sign_in_with_password({
-                        "email": email,
-                        "password": password
-                    })
-
-                    if result.user and result.session:
-                        st.session_state.user_email = result.user.email
-                        st.rerun()
-                    else:
-                        st.error("Login unsuccessful. Please try again.")
-
-            except Exception as e:
-                st.error(f"Authentication failed: {e}")
-
-   
-            ("Problem Solving", "Solve beginner programming exercises."),
-            ("SQL", "Learn database queries and CRUD operations."),
-            ("Git", "Practice commits and version control."),
-            ("APIs", "Learn how to call and use REST APIs.")
-        ]
-    }
-}
 
 
 
