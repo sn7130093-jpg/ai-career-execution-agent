@@ -65,67 +65,65 @@ CAREERS = {
     }
 }
 
-# Authentication - Email OTP
+# Authentication - Email and Password
+
 if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
-if "otp_sent" not in st.session_state:
-    st.session_state.otp_sent = False
-
 if not st.session_state.user_email:
-    st.subheader("🔐 Sign in with Email OTP")
-    st.write("Enter your email to receive a verification code.")
+    st.subheader("🔐 AI Career Execution Agent")
+    st.write("Sign in or create an account to continue.")
 
-    email = st.text_input(
-        "Email address", key="otp_email"
-    ).strip()
+    auth_mode = st.radio(
+        "Choose an option",
+        ["Log In", "Create Account"],
+        horizontal=True
+    )
 
-    if st.button("Send OTP", type="primary"):
-        if not email or "@" not in email:
-            st.error("Please enter a valid email address.")
+    email = st.text_input("Email address").strip()
+    password = st.text_input(
+        "Password",
+        type="password"
+    )
+
+    if st.button(auth_mode, type="primary"):
+        if not email or not password:
+            st.error("Please enter your email and password.")
         else:
             try:
-                supabase.auth.sign_in_with_otp({
-                    "email": email,
-                    "options": {"should_create_user": True}
-                })
-                st.session_state.otp_sent = True
-                st.success(
-                    "Check your email for the verification code."
-                )
-            except Exception as e:
-                st.error(f"Could not send OTP: {e}")
+                if auth_mode == "Create Account":
+                    result = supabase.auth.sign_up({
+                        "email": email,
+                        "password": password
+                    })
 
-    if st.session_state.otp_sent:
-        with st.form("verify_otp_form"):
-            otp = st.text_input("Enter email verification code")
-            verify_clicked = st.form_submit_button(
-                "Verify OTP", type="primary"
-            )
-
-        if verify_clicked:
-            if not otp.strip():
-                st.error("Please enter the verification code.")
-            else:
-                try:
-                    result = supabase.auth.verify_otp({
-                        "email": st.session_state.otp_email,
-                        "token": otp.strip(),
-                        "type": "email"
+                    if result.session and result.user:
+                        st.session_state.user_email = email
+                        st.success("Account created!")
+                        st.rerun()
+                    else:
+                        st.info(
+                            "Account created. Check your email "
+                            "if confirmation is required."
+                        )
+                else:
+                    result = supabase.auth.sign_in_with_password({
+                        "email": email,
+                        "password": password
                     })
 
                     if result.user and result.session:
-                        st.session_state.user_email = result.user.email
-                        st.session_state.otp_sent = False
-                        st.success("Email verified successfully!")
+                        st.session_state.user_email = email
+                        st.success("Login successful!")
                         st.rerun()
                     else:
-                        st.error("Verification was unsuccessful.")
-                except Exception:
-                    st.error(
-                        "OTP verification failed or expired. "
-                        "Request a new code and try again."
-                    )
+                        st.error("Login unsuccessful. Please try again.")
+
+            except Exception:
+                st.error(
+                    "Login or account creation failed. "
+                    "Check your details and Supabase settings."
+                )
 
     st.stop()
                
