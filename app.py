@@ -81,11 +81,27 @@ if not st.session_state.user_email:
     )
 
     email = st.text_input("Email address").strip()
-    password = st.text_input(
-        "Password",
-        type="password"
-    )
+    password = st.text_input("Password", type="password")
 
+    # Forgot password section
+    st.write("Forgot your password?")
+    if st.button("Reset Password"):
+        if not email or "@" not in email:
+            st.error("Enter your registered email address first.")
+        else:
+            try:
+                supabase.auth.reset_password_for_email(email)
+                st.success(
+                    "If the email is registered, check your inbox "
+                    "and spam folder for a password reset link."
+                )
+            except Exception:
+                st.error(
+                    "Could not send the reset email. "
+                    "Check your Supabase email settings and try again."
+                )
+
+    # Login or create account
     if st.button(auth_mode, type="primary"):
         if not email or not password:
             st.error("Please enter your email and password.")
@@ -98,13 +114,13 @@ if not st.session_state.user_email:
                     })
 
                     if result.session and result.user:
-                        st.session_state.user_email = email
+                        st.session_state.user_email = result.user.email
                         st.success("Account created!")
                         st.rerun()
                     else:
                         st.info(
-                            "Account created. Check your email "
-                            "if confirmation is required."
+                            "Check your email to confirm your account, "
+                            "then log in."
                         )
                 else:
                     result = supabase.auth.sign_in_with_password({
@@ -113,20 +129,23 @@ if not st.session_state.user_email:
                     })
 
                     if result.user and result.session:
-                        st.session_state.user_email = email
+                        st.session_state.user_email = result.user.email
                         st.success("Login successful!")
                         st.rerun()
                     else:
                         st.error("Login unsuccessful. Please try again.")
 
-            except Exception as e:
-                st.error(f"Authentication error:{e}")
-                    
-                
-                
+            except Exception:
+                st.error(
+                    "Authentication failed. Check your email, password, "
+                    "and Supabase authentication settings."
+                )
 
     st.stop()
-               
+
+
+
+
 # Main application, available after login
 st.sidebar.success(f"Signed in as {st.session_state.user_email}")
 
