@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase import create_client
+from streamlit_url_fragments import get_fragments
 
 st.set_page_config(
     page_title="AI Career Execution Agent",
