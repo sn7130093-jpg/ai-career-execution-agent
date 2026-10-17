@@ -15,7 +15,7 @@ try:
         st.secrets["SUPABASE_KEY"]
     )
 except Exception as e:
-                st.error(f"Login failed: {e}")
+    st.error(f"Login failed: {e}")
     st.stop()
 
 CAREERS = {
