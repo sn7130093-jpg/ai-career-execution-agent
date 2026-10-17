@@ -1,4 +1,4 @@
 streamlit
 pandas
 supabase
-streamlit-url-fragment
+streamlit-url-fragments
