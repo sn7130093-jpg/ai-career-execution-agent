@@ -133,6 +133,30 @@ if not st.session_state.user_email:
                         )
                 except Exception as e:
                     st.error(f"Registration error: {e}")
+
+    with forgot_password_tab:
+        st.subheader("Forgot Password")
+        reset_email = st.text_input(
+            "Enter your registered email",
+            key="reset_email"
+        )
+
+        if st.button("Send Reset Link"):
+            if not reset_email.strip():
+                st.warning("Please enter your email.")
+            else:
+                try:
+                    supabase.auth.reset_password_for_email(
+                        reset_email.strip(),
+                        {
+                            "redirect_to": "https://ai-career-execution-agent-tzhqzd27gmfgqb7dtnbqzj.streamlit.app"
+                        }
+                    )
+                    st.success(
+                        "If the account exists, a password reset email will be sent."
+                    )
+                except Exception:
+                    st.error("Could not send the reset email. Please try again later.")
     st.stop()
 
 # Main application, available after login
