@@ -62,6 +62,7 @@ CAREERS = {
 }
 
 # Authentication
+recovery_mode = st.query_params.get("type") == "recovery"
 if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
