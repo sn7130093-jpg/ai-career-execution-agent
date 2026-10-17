@@ -68,38 +68,6 @@ if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
 if not st.session_state.user_email:
-   fragments = get_fragments()
-
-   if isinstance(fragments, dict):
-        recovery_data = fragments
-   elif isinstance(fragments, str):
-        recovery_data = dict(
-            parse_qs(fragments.lstrip("#")).items()
-        )
-        recovery_data = {
-            key: value[0] if isinstance(value, list) else value
-            for key, value in recovery_data.items()
-        }
-    else:
-        recovery_data = {}
-
-    if recovery_data.get("type") == "recovery":
-        access_token = recovery_data.get("access_token")
-        refresh_token = recovery_data.get("refresh_token")
-
-        if access_token and refresh_token:
-            try:
-                supabase.auth.set_session(
-                    access_token, refresh_token
-                )
-                st.session_state.recovery_mode = True
-                st.rerun()
-            except Exception:
-                st.error(
-                    "This reset link is invalid or expired. "
-                    "Please request a new password reset email."
-                )
-                st.stop()
     st.title("🎯 AI Career Execution Agent")
     st.write("Sign in to create your personalized career roadmap.")
 
