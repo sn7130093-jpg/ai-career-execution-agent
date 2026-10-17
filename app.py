@@ -69,7 +69,7 @@ if not st.session_state.user_email:
     st.title("🎯 AI Career Execution Agent")
     st.write("Sign in to create your personalized career roadmap.")
 
-    login_tab, register_tab, forgot password_tab = st.tabs(["Login", "Register", "Forgot Password"])
+    login_tab, register_tab, forgot_password_tab = st.tabs(["Login", "Register", "Forgot Password"])
 
     with login_tab:
         with st.form("login_form"):
