@@ -70,9 +70,9 @@ if "user_email" not in st.session_state:
 if not st.session_state.user_email:
    fragments = get_fragments()
 
-    if isinstance(fragments, dict):
+   if isinstance(fragments, dict):
         recovery_data = fragments
-    elif isinstance(fragments, str):
+   elif isinstance(fragments, str):
         recovery_data = dict(
             parse_qs(fragments.lstrip("#")).items()
         )
