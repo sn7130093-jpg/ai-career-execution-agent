@@ -131,12 +131,8 @@ if not st.session_state.user_email:
                             "Registration submitted. Check your email "
                             "for a confirmation link, then log in."
                         )
-                except Exception:
-                    st.error(
-                        "Registration failed. The email may already be "
-                        "registered, or Supabase may require another step."
-                    )
-
+                except Exception as e:
+                    st.error(f"Registration error: {e}")
     st.stop()
 
 # Main application, available after login
