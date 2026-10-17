@@ -89,11 +89,8 @@ if not st.session_state.user_email:
                 })
                 st.session_state.user_email = result.user.email
                 st.rerun()
-            except Exception:
-                st.error(
-                    "Login failed. Check your email and password. "
-                    "If you just registered, confirm your email first."
-                )
+            except Exception as e:
+                st.error(f"Login error: {e}")
 
     with register_tab:
         with st.form("register_form"):
