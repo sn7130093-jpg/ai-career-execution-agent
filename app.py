@@ -14,12 +14,8 @@ try:
         st.secrets["SUPABASE_URL"],
         st.secrets["SUPABASE_KEY"]
     )
-except Exception:
-    st.error(
-        "Supabase is not configured yet. "
-        "Please add SUPABASE_URL and SUPABASE_KEY "
-        "in Streamlit Settings > Secrets."
-    )
+except Exception as e:
+                st.error(f"Login failed: {e}")
     st.stop()
 
 CAREERS = {
