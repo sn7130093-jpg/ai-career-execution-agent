@@ -67,6 +67,10 @@ if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
 if not st.session_state.user_email:
+    fragments = get_fragments()
+
+    if fragments:
+        st.write("Password reset link detected.")
     st.title("🎯 AI Career Execution Agent")
     st.write("Sign in to create your personalized career roadmap.")
 
