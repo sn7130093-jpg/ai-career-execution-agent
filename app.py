@@ -68,6 +68,10 @@ if "user_email" not in st.session_state:
     st.session_state.user_email = None
 
 if not st.session_state.user_email:
+    fragments = get_fragments()
+
+    if fragments is None:
+        st.stop()
     st.title("🎯 AI Career Execution Agent")
     st.write("Sign in to create your personalized career roadmap.")
 
