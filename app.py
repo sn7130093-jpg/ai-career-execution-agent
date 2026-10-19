@@ -70,8 +70,10 @@ if "user_email" not in st.session_state:
 if not st.session_state.user_email:
     fragments = get_fragments()
 
-    if fragments is None:
-        st.stop()
+    if isinstance(fragments, dict):
+        st.session_state["recovery_fragments"] = fragments
+    elif isinstance(fragments, str):
+        st.session_state["recovery_fragments"] = parse_qs(fragments)
     st.title("🎯 AI Career Execution Agent")
     st.write("Sign in to create your personalized career roadmap.")
 
