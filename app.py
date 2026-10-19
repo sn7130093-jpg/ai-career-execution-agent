@@ -326,7 +326,36 @@ st.write(
 )
 
 st.sidebar.header("Your Career Profile")
+
 name = st.sidebar.text_input("Your name (optional)")
+
+education_level = st.sidebar.selectbox(
+    "Your education level",
+    [
+        "10th / SSC",
+        "Intermediate / 12th",
+        "Diploma",
+        "Undergraduate Degree",
+        "Postgraduate Degree",
+        "Other"
+    ]
+)
+
+education_background = st.sidebar.selectbox(
+    "Your education background",
+    [
+        "Engineering & Technology",
+        "Commerce & Accounting",
+        "Arts & Humanities",
+        "Science",
+        "Healthcare & Life Sciences",
+        "Management",
+        "Education",
+        "Creative & Digital",
+        "Other"
+    ]
+)
+
 career = st.sidebar.selectbox(
     "Choose your target career",
     list(CAREERS.keys())
