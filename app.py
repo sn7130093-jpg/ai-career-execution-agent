@@ -380,6 +380,41 @@ if st.sidebar.button("Analyze My Career", type="primary"):
     st.session_state["analyzed"] = True
 
 if st.session_state.get("analyzed", False):
+    st.subheader("🎓 Education-Based Career Guidance")
+
+    if education_level == "10th / SSC":
+        st.info(
+            "After SSC, you can explore Intermediate, ITI, or Diploma "
+            "pathways. Check the eligibility requirements for your chosen career."
+        )
+    elif education_level == "Intermediate / 12th":
+        st.info(
+            "Your next options may include a degree, diploma, professional "
+            "course, or eligible entry-level job, depending on your subjects."
+        )
+    elif education_level == "Diploma":
+        st.info(
+            "Explore diploma-related jobs, further study, or degree entry "
+            "options. Requirements vary by course and employer."
+        )
+    elif education_level == "Undergraduate Degree":
+        st.info(
+            "Explore entry-level jobs, internships, competitive exams, "
+            "or further study that match your degree and skills."
+        )
+    elif education_level == "Postgraduate Degree":
+        st.info(
+            "Explore specialist roles, research, teaching where eligible, "
+            "and jobs matching your postgraduate qualification."
+        )
+    else:
+        st.info(
+            "Check the qualification requirements for your target career "
+            "and choose a suitable learning pathway."
+        )
+
+    st.caption(f"Selected education background: {education_background}")
+
     required = CAREERS[career]["skills"]
     missing = [s for s in required if s not in current_skills]
     matched = [s for s in required if s in current_skills]
