@@ -21,44 +21,184 @@ except Exception as e:
     st.stop()
 
 CAREERS = {
-    "Data Analyst": {
-        "skills": ["Python", "SQL", "Excel", "Statistics", "Power BI"],
+    "Engineering & Technology": {
+        "skills": ["Python", "SQL", "Git", "Problem Solving", "APIs"],
         "roadmap": [
-            ("Excel", "Practice formulas, sorting, and pivot tables."),
+            ("Python", "Learn variables, loops, functions, and data structures."),
+            ("SQL", "Practice database queries."),
+            ("Git", "Learn version control and commits."),
+            ("Problem Solving", "Solve beginner programming exercises."),
+            ("APIs", "Build a small application using an API.")
+        ]
+    },
+    "Data Analyst": {
+        "skills": ["Excel", "SQL", "Python", "Statistics", "Power BI"],
+        "roadmap": [
+            ("Excel", "Practice formulas and pivot tables."),
             ("SQL", "Learn SELECT, WHERE, GROUP BY, and JOIN."),
-            ("Python", "Practice Python basics and Pandas."),
-            ("Statistics", "Study averages, distributions, and correlation."),
-            ("Power BI", "Build an interactive dashboard.")
+            ("Python", "Practice data analysis with Pandas."),
+            ("Statistics", "Learn averages and distributions."),
+            ("Power BI", "Create an interactive dashboard.")
         ]
     },
     "AI/ML Engineer": {
         "skills": ["Python", "Statistics", "Machine Learning", "Pandas", "SQL"],
         "roadmap": [
-            ("Python", "Practice functions, lists, dictionaries, and files."),
-            ("Pandas", "Load, clean, and analyze datasets."),
-            ("Statistics", "Learn probability, averages, and distributions."),
-            ("Machine Learning", "Study regression, classification, and evaluation."),
-            ("SQL", "Practice queries and database basics.")
+            ("Python", "Practice Python programming."),
+            ("Statistics", "Learn probability and averages."),
+            ("Pandas", "Clean and analyze datasets."),
+            ("Machine Learning", "Study regression and classification."),
+            ("SQL", "Practice database queries.")
         ]
     },
     "Web Developer": {
-        "skills": ["HTML", "CSS", "JavaScript", "Python", "SQL"],
+        "skills": ["HTML", "CSS", "JavaScript", "Git", "APIs"],
         "roadmap": [
-            ("HTML", "Create a webpage using headings, forms, and links."),
-            ("CSS", "Practice layouts, colors, and responsive design."),
+            ("HTML", "Create webpages with headings, forms, and links."),
+            ("CSS", "Practice layouts and responsive design."),
             ("JavaScript", "Learn variables, functions, and events."),
-            ("Python", "Understand programming basics."),
-            ("SQL", "Create tables and practice queries.")
+            ("Git", "Save projects using version control."),
+            ("APIs", "Connect a webpage to an API.")
         ]
     },
-    "Python Developer": {
-        "skills": ["Python", "SQL", "Git", "Problem Solving", "APIs"],
+    "Commerce & Accounting": {
+        "skills": ["Excel", "Accounting", "Communication", "Business Maths", "Tax Basics"],
         "roadmap": [
-            ("Python", "Practice functions, loops, and data structures."),
-            ("Problem Solving", "Solve beginner programming exercises."),
-            ("SQL", "Learn database queries and CRUD operations."),
-            ("Git", "Practice commits and version control."),
-            ("APIs", "Learn how to call and use REST APIs.")
+            ("Excel", "Practice spreadsheets and formulas."),
+            ("Accounting", "Learn basic accounting entries."),
+            ("Communication", "Practice professional emails."),
+            ("Business Maths", "Learn percentages and financial calculations."),
+            ("Tax Basics", "Study introductory tax concepts.")
+        ]
+    },
+    "Banking & Finance": {
+        "skills": ["Numerical Ability", "Reasoning", "English", "Excel", "Financial Awareness"],
+        "roadmap": [
+            ("Numerical Ability", "Practice percentages, ratios, and averages."),
+            ("Reasoning", "Solve logical reasoning questions."),
+            ("English", "Practice grammar and comprehension."),
+            ("Excel", "Learn formulas and tables."),
+            ("Financial Awareness", "Study banking and finance basics.")
+        ]
+    },
+    "Business & Management": {
+        "skills": ["Communication", "Leadership", "Excel", "Planning", "Problem Solving"],
+        "roadmap": [
+            ("Communication", "Practice presentations and emails."),
+            ("Leadership", "Learn teamwork and delegation."),
+            ("Excel", "Track tasks and business data."),
+            ("Planning", "Create a simple project plan."),
+            ("Problem Solving", "Practice real-world case studies.")
+        ]
+    },
+    "Arts & Humanities": {
+        "skills": ["Writing", "Research", "Communication", "Critical Thinking", "Presentation"],
+        "roadmap": [
+            ("Writing", "Write short articles and summaries."),
+            ("Research", "Find and compare reliable sources."),
+            ("Communication", "Practice clear spoken communication."),
+            ("Critical Thinking", "Evaluate arguments and evidence."),
+            ("Presentation", "Prepare a short presentation.")
+        ]
+    },
+    "Teaching & Education": {
+        "skills": ["Communication", "Subject Knowledge", "Presentation", "Planning", "Digital Skills"],
+        "roadmap": [
+            ("Subject Knowledge", "Strengthen your chosen subject."),
+            ("Communication", "Explain concepts in simple language."),
+            ("Presentation", "Prepare a sample lesson."),
+            ("Planning", "Create a lesson plan."),
+            ("Digital Skills", "Practice online teaching tools.")
+        ]
+    },
+    "Science & Research": {
+        "skills": ["Research", "Statistics", "Excel", "Scientific Writing", "Data Analysis"],
+        "roadmap": [
+            ("Research", "Learn how to frame a research question."),
+            ("Statistics", "Study basic statistical concepts."),
+            ("Excel", "Organize and analyze data."),
+            ("Scientific Writing", "Write a short research summary."),
+            ("Data Analysis", "Interpret a small dataset.")
+        ]
+    },
+    "Healthcare & Life Sciences": {
+        "skills": ["Biology", "Communication", "Research", "Data Analysis", "Digital Skills"],
+        "roadmap": [
+            ("Biology", "Revise foundational biology concepts."),
+            ("Communication", "Practice clear and respectful communication."),
+            ("Research", "Learn to read reliable scientific sources."),
+            ("Data Analysis", "Practice interpreting simple data."),
+            ("Digital Skills", "Learn common digital documentation tools.")
+        ]
+    },
+    "Digital Marketing": {
+        "skills": ["Writing", "Social Media", "SEO", "Analytics", "Design Basics"],
+        "roadmap": [
+            ("Writing", "Create sample promotional content."),
+            ("Social Media", "Plan a weekly content calendar."),
+            ("SEO", "Learn keywords and search basics."),
+            ("Analytics", "Understand engagement metrics."),
+            ("Design Basics", "Create simple promotional graphics.")
+        ]
+    },
+    "Graphic Designer": {
+        "skills": ["Design Basics", "Typography", "Color Theory", "Creativity", "Portfolio"],
+        "roadmap": [
+            ("Design Basics", "Learn layout and visual hierarchy."),
+            ("Typography", "Practice font pairing."),
+            ("Color Theory", "Create balanced color palettes."),
+            ("Creativity", "Redesign a simple poster."),
+            ("Portfolio", "Collect your best design samples.")
+        ]
+    },
+    "Content Writer": {
+        "skills": ["Writing", "Grammar", "Research", "SEO", "Editing"],
+        "roadmap": [
+            ("Writing", "Write a short article."),
+            ("Grammar", "Practice sentence clarity."),
+            ("Research", "Verify facts using reliable sources."),
+            ("SEO", "Learn basic keyword research."),
+            ("Editing", "Revise an article for clarity.")
+        ]
+    },
+    "Human Resources": {
+        "skills": ["Communication", "Excel", "Recruitment Basics", "Organization", "Interviewing"],
+        "roadmap": [
+            ("Communication", "Practice professional emails."),
+            ("Excel", "Create a candidate tracking sheet."),
+            ("Recruitment Basics", "Learn the recruitment process."),
+            ("Organization", "Practice scheduling and record keeping."),
+            ("Interviewing", "Learn structured interview questions.")
+        ]
+    },
+    "Customer Support": {
+        "skills": ["Communication", "Problem Solving", "Typing", "Email Writing", "Digital Skills"],
+        "roadmap": [
+            ("Communication", "Practice polite customer conversations."),
+            ("Problem Solving", "Work through sample customer issues."),
+            ("Typing", "Practice typing accurately."),
+            ("Email Writing", "Draft clear support responses."),
+            ("Digital Skills", "Learn ticketing-system basics.")
+        ]
+    },
+    "Government Jobs & Competitive Exams": {
+        "skills": ["Numerical Ability", "Reasoning", "English", "General Knowledge", "Computer Basics"],
+        "roadmap": [
+            ("Numerical Ability", "Practice arithmetic fundamentals."),
+            ("Reasoning", "Solve basic logic questions."),
+            ("English", "Study grammar and comprehension."),
+            ("General Knowledge", "Follow reliable current affairs sources."),
+            ("Computer Basics", "Revise common computer concepts.")
+        ]
+    },
+    "Entrepreneurship": {
+        "skills": ["Communication", "Planning", "Marketing", "Budgeting", "Problem Solving"],
+        "roadmap": [
+            ("Planning", "Identify a problem worth solving."),
+            ("Marketing", "Define a target audience."),
+            ("Budgeting", "Estimate costs and revenue."),
+            ("Communication", "Prepare a simple business pitch."),
+            ("Problem Solving", "Test your idea on a small scale.")
         ]
     }
 }
