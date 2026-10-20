@@ -21,7 +21,7 @@ try:
 except Exception as e:
     st.error(f"Login failed: {e}")
     st.stop()
-def recommend_careers(student_skills, careers, top_n=3):
+def recommend_careers(student_skills, student_interests, careers, top_n=3):
     """Rank careers by similarity to the student's current skills."""
 
     if not careers:
@@ -30,9 +30,8 @@ def recommend_careers(student_skills, careers, top_n=3):
     career_names = list(careers.keys())
 
     documents = [
-        " ".join(student_skills).lower()
-    ]
-
+    " ".join(student_skills + student_interests).lower()
+]
     documents.extend(
         " ".join(details["skills"]).lower()
         for details in careers.values()
@@ -416,6 +415,24 @@ career = st.sidebar.selectbox(
     "Choose your target career",
     list(CAREERS.keys())
 )
+student_interests = st.sidebar.multiselect(
+    "Your career interests",
+    [
+        "Data Analysis",
+        "Programming",
+        "Artificial Intelligence",
+        "Business",
+        "Finance",
+        "Research",
+        "Healthcare",
+        "Teaching",
+        "Design",
+        "Writing",
+        "Communication",
+        "Problem Solving"
+    ],
+    help="Select interests that you enjoy."
+)
 
 all_skills = sorted({
     skill
@@ -438,12 +455,13 @@ if st.sidebar.button("Analyze My Career", type="primary"):
 if st.session_state.get("analyzed", False):
     st.subheader("🤖 Smart Career Recommendations")
 
-    if current_skills:
+    if current_skills or student_interests:
         recommendations = recommend_careers(
-            current_skills,
-            CAREERS,
-            top_n=3
-        )
+    current_skills,
+    student_interests,
+    CAREERS,
+    top_n=3
+)
 
         if recommendations:
             st.caption(
@@ -466,8 +484,8 @@ if st.session_state.get("analyzed", False):
             st.info("No recommendations are available yet.")
     else:
         st.info(
-            "Select at least one skill in the sidebar to get "
-            "smart career recommendations."
+           "Select at least one skill or interest in the sidebar "
+"to get smart career recommendations."
         )
     st.subheader("🎓 Education-Based Career Guidance")
 
