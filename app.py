@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from supabase import create_client
 from streamlit_url_fragments import get_fragments
 from urllib.parse import parse_qs
@@ -19,7 +21,61 @@ try:
 except Exception as e:
     st.error(f"Login failed: {e}")
     st.stop()
+def recommend_careers(student_skills, careers, top_n=3):
+    """Rank careers by similarity to the student's current skills."""
 
+    if not careers:
+        return []
+
+    career_names = list(careers.keys())
+
+    documents = [
+        " ".join(student_skills).lower()
+    ]
+
+    documents.extend(
+        " ".join(details["skills"]).lower()
+        for details in careers.values()
+    )
+
+    vectorizer = TfidfVectorizer()
+    matrix = vectorizer.fit_transform(documents)
+
+    scores = cosine_similarity(
+        matrix[0:1],
+        matrix[1:]
+    ).flatten()
+
+    results = []
+
+    for index, name in enumerate(career_names):
+        required_skills = careers[name]["skills"]
+        known = [
+            skill for skill in required_skills
+            if skill.lower() in {
+                item.lower() for item in student_skills
+            }
+        ]
+        missing = [
+            skill for skill in required_skills
+            if skill.lower() not in {
+                item.lower() for item in student_skills
+            }
+        ]
+
+        results.append({
+            "Career": name,
+            "Similarity (%)": round(float(scores[index]) * 100, 1),
+            "Matched Skills": ", ".join(known) or "None yet",
+            "Skills to Learn": ", ".join(missing) or "None"
+        })
+
+    results.sort(
+        key=lambda item: item["Similarity (%)"],
+        reverse=True
+    )
+
+    return results[:top_n]
 CAREERS = {
     "Engineering & Technology": {
         "skills": ["Python", "SQL", "Git", "Problem Solving", "APIs"],
@@ -380,6 +436,39 @@ if st.sidebar.button("Analyze My Career", type="primary"):
     st.session_state["analyzed"] = True
 
 if st.session_state.get("analyzed", False):
+    st.subheader("🤖 Smart Career Recommendations")
+
+    if current_skills:
+        recommendations = recommend_careers(
+            current_skills,
+            CAREERS,
+            top_n=3
+        )
+
+        if recommendations:
+            st.caption(
+                "Ranked by skill-profile similarity. "
+                "Scores are similarity measures, not success probabilities."
+            )
+
+            for item in recommendations:
+                st.markdown(
+                    f"**{item['Career']} — "
+                    f"{item['Similarity (%)']}% similarity**"
+                )
+                st.write(
+                    f"Matched skills: {item['Matched Skills']}"
+                )
+                st.write(
+                    f"Skills to learn: {item['Skills to Learn']}"
+                )
+        else:
+            st.info("No recommendations are available yet.")
+    else:
+        st.info(
+            "Select at least one skill in the sidebar to get "
+            "smart career recommendations."
+        )
     st.subheader("🎓 Education-Based Career Guidance")
 
     if education_level == "10th / SSC":
