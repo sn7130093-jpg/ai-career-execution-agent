@@ -584,3 +584,185 @@ if st.session_state.get("analyzed", False):
             "Start with the first missing skill in your roadmap. "
             "Practice it with a small project, then move to the next skill."
         )
+    st.subheader("🎤 Interview Preparation")
+
+    interview_level = st.selectbox(
+        "Choose interview difficulty",
+        ["Beginner", "Intermediate", "Advanced"],
+        key="interview_level"
+    )
+
+    interview_questions = {
+        "AI/ML Engineer": {
+            "Beginner": [
+                ("What is Artificial Intelligence?",
+                 "AI is the ability of machines to perform tasks that normally require human intelligence."),
+                ("What is Machine Learning?",
+                 "Machine Learning enables computers to learn patterns from data."),
+                ("What is Python used for in AI?",
+                 "Python is used for data processing, model building and evaluation.")
+            ],
+            "Intermediate": [
+                ("What is overfitting?",
+                 "Overfitting happens when a model learns training data too closely and performs poorly on unseen data."),
+                ("What is the difference between classification and regression?",
+                 "Classification predicts categories, while regression predicts numerical values."),
+                ("What is train-test splitting?",
+                 "It separates data for training a model and evaluating it on unseen examples.")
+            ],
+            "Advanced": [
+                ("Explain precision and recall.",
+                 "Precision measures how many positive predictions are correct; recall measures how many actual positives are identified."),
+                ("What is cross-validation?",
+                 "It evaluates a model across multiple data splits to estimate how well it generalizes."),
+                ("How would you handle imbalanced data?",
+                 "Possible approaches include class weighting, resampling and choosing suitable evaluation metrics.")
+            ]
+        },
+        "Data Analyst": {
+            "Beginner": [
+                ("What does a Data Analyst do?",
+                 "A Data Analyst cleans, examines and interprets data to help make decisions."),
+                ("What is SQL?",
+                 "SQL is used to retrieve and manage data in relational databases."),
+                ("What is a spreadsheet used for?",
+                 "Spreadsheets help organize, calculate, analyze and visualize data.")
+            ],
+            "Intermediate": [
+                ("What is the difference between WHERE and HAVING?",
+                 "WHERE filters rows before grouping; HAVING filters groups after aggregation."),
+                ("How do you handle missing values?",
+                 "Inspect why values are missing, then remove or impute values when appropriate."),
+                ("What is a KPI?",
+                 "A Key Performance Indicator measures progress toward an important objective.")
+            ],
+            "Advanced": [
+                ("How would you investigate a sudden sales decline?",
+                 "Validate the data, compare periods and segments, identify contributing factors, and communicate evidence."),
+                ("What is a window function in SQL?",
+                 "It calculates across related rows without collapsing them into a single grouped row."),
+                ("How would you validate a dashboard?",
+                 "Check data sources, calculations, filters, totals and consistency against trusted reports.")
+            ]
+        },
+        "Web Developer": {
+            "Beginner": [
+                ("What is HTML?",
+                 "HTML structures the content of a web page."),
+                ("What is CSS?",
+                 "CSS controls the appearance and layout of a web page."),
+                ("What is JavaScript?",
+                 "JavaScript adds interactive behavior to web pages.")
+            ],
+            "Intermediate": [
+                ("What is an API?",
+                 "An API defines how software systems communicate."),
+                ("What is responsive design?",
+                 "It adapts a website layout to different screen sizes."),
+                ("What is the difference between frontend and backend?",
+                 "Frontend is the user-facing part; backend handles server-side logic and data.")
+            ],
+            "Advanced": [
+                ("How would you improve website performance?",
+                 "Measure bottlenecks, optimize assets and queries, and reduce unnecessary work."),
+                ("What is authentication versus authorization?",
+                 "Authentication verifies identity; authorization determines permitted actions."),
+                ("How do you protect user input?",
+                 "Validate input, use parameterized queries, encode output and apply appropriate security controls.")
+            ]
+        },
+        "Banking & Finance": {
+            "Beginner": [
+                ("What is interest?",
+                 "Interest is the cost of borrowing money or the return earned on savings."),
+                ("What is a savings account?",
+                 "It is a bank account for keeping money while earning applicable interest."),
+                ("What is inflation?",
+                 "Inflation is a general increase in prices over time.")
+            ],
+            "Intermediate": [
+                ("What is the difference between a debit and credit card?",
+                 "A debit card usually uses money in your account; a credit card uses borrowed funds."),
+                ("What is a fixed deposit?",
+                 "It is a deposit kept for a specified term at an agreed interest rate."),
+                ("What is a credit score?",
+                 "It summarizes credit history and helps lenders assess credit risk.")
+            ],
+            "Advanced": [
+                ("What is non-performing asset (NPA)?",
+                 "An NPA is a loan or advance classified as non-performing under applicable banking rules."),
+                ("What is liquidity risk?",
+                 "It is the risk of being unable to meet financial obligations when due."),
+                ("Why is KYC important?",
+                 "Know Your Customer procedures help verify customer identity and reduce misuse of financial services.")
+            ]
+        },
+        "Government Jobs & Competitive Exams": {
+            "Beginner": [
+                ("Why do you want a government job?",
+                 "Explain your interest in public service, responsibility and the specific role."),
+                ("What is the Constitution of India?",
+                 "It is India's supreme legal framework for government and citizens' rights and duties."),
+                ("What are current affairs?",
+                 "They are important recent events in India and around the world.")
+            ],
+            "Intermediate": [
+                ("What is the role of the Parliament?",
+                 "Parliament makes laws, oversees government and approves public expenditure."),
+                ("What is the difference between the Lok Sabha and Rajya Sabha?",
+                 "The Lok Sabha is the House of the People; the Rajya Sabha is the Council of States."),
+                ("How would you prepare for an aptitude test?",
+                 "Build fundamentals, practise timed questions, review mistakes and take mock tests.")
+            ],
+            "Advanced": [
+                ("How would you prioritize questions in a timed exam?",
+                 "Answer familiar questions first, manage time and return to difficult questions if time remains."),
+                ("How do you verify a current-affairs fact?",
+                 "Check the date and confirm it using reliable official or reputable sources."),
+                ("How would you handle an ethical dilemma at work?",
+                 "Follow applicable rules, document the facts and consult the appropriate authority.")
+            ]
+        }
+    }
+
+    default_questions = {
+        "Beginner": [
+            ("Tell me about yourself.",
+             "Briefly explain your education, skills, interests and career goal."),
+            ("Why did you choose this career?",
+             "Connect your interests and strengths to the role."),
+            ("What skill are you currently improving?",
+             "Name a real skill and explain how you practise it.")
+        ],
+        "Intermediate": [
+            ("Describe a project you worked on.",
+             "Explain its goal, your contribution, tools used and outcome."),
+            ("How do you solve a difficult problem?",
+             "Break it down, investigate possible causes, test solutions and review the result."),
+            ("How do you learn a new tool?",
+             "Use documentation, practise with a small task and apply what you learn.")
+        ],
+        "Advanced": [
+            ("Describe a challenging problem related to your target role.",
+             "Use a specific example and explain your reasoning and outcome."),
+            ("How would you measure success in this role?",
+             "Choose measurable results relevant to the role and explain how you would track them."),
+            ("Tell me about a mistake and what you learned.",
+             "Give an honest example, explain your response and describe what you changed.")
+        ]
+    }
+
+    selected_questions = interview_questions.get(
+        career, default_questions
+    ).get(interview_level, default_questions[interview_level])
+
+    st.caption(
+        f"Practice questions for your selected career: {career}"
+    )
+
+    for number, (question, answer) in enumerate(
+        selected_questions, start=1
+    ):
+        with st.expander(f"Question {number}: {question}"):
+            st.write("**Suggested answer:**")
+            st.write(answer)
